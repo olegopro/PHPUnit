@@ -10,6 +10,7 @@ class User
     private $email;
     private $pass;
     private $age;
+    private $observers;
 
     public function __construct($name = NULL, $email = NULL, $pass = NULL, $age = NULL)
     {
@@ -17,6 +18,27 @@ class User
         $this->email = $email;
         $this->pass = $pass;
         $this->age = $age;
+    }
+
+    public function save(Db $db): bool
+    {
+        if ($db->connect('localhost', 'user', 'pass', 'db')) {
+            $db->query('SELECT');
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    public function attach(UserObserver $userObserver)
+    {
+        $this->observers[] = $userObserver;
+    }
+
+    public function update()
+    {
+        $this->notify('update');
     }
 
     /**
@@ -40,9 +62,10 @@ class User
      */
     public function getEmail()
     {
-        if(empty($this->email)){
+        if (empty($this->email)) {
             throw new InvalidArgumentException('Error email');
         }
+
         return $this->email;
     }
 
@@ -84,5 +107,12 @@ class User
     public function setAge($age): void
     {
         $this->age = $age;
+    }
+
+    private function notify($string)
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($string);
+        }
     }
 }

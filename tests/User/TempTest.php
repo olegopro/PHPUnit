@@ -1,6 +1,6 @@
 <?php
 
-class TempTest extends \PHPUnit\Framework\TestCase
+class TempTest //extends \PHPUnit\Framework\TestCase
 {
     //запуск перед инициализацией класса
     public static function setUpBeforeClass(): void
