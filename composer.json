@@ -13,6 +13,7 @@
     }
   },
   "require-dev": {
+    "mockery/mockery": "dev-master",
     "phpunit/phpunit": "^9.5"
   },
   "require": {

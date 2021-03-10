@@ -16,40 +16,71 @@ class UserTest extends TestCase
     {
     }
 
-    public function testObserver()
+    //создание двойника с помощью библиотеки Mockery
+    public function testMockery()
     {
-        $observer = $this->getMockBuilder(\App\Models\UserObserver::class)
-                         ->onlyMethods(['update'])
-                         ->getMock();
-        //тестирование аргуметов метода
-        $observer->expects($this->exactly(2))
-                 ->method('update')
-                 ->with($this->equalTo('update'));
+        //тестирование класса User и Db
+        /*$db = Mockery::mock(\App\Models\Db::class);
+        $db->shouldReceive('connect')
+           ->once()
+           ->andReturn(TRUE);
 
-                /*->with(
-                    //$this->greaterThan()
-                    // $this->stringContains('upd')
-                     $this->anything()
-                 );*/
+        $db->shouldReceive('query')
+           ->once()
+           ->andReturn(TRUE);
 
-                /*->withConsecutive(
-                    [$this->stringContains('upd')],
-                    [$this->stringContains('upd')]
-                );*/
+        $this->assertTrue($this->user->save($db));*/
 
-                /*->with($this->callback(function ($param){
-                    return 'update' == $param;
-                }));*/
+        //тестирование класса observer
+        $observer = Mockery::mock(\App\Models\UserObserver::class);
+        $observer->shouldReceive('update')
+                 //->with('update')
+                 ->withArgs(function ($param){
+                     $this->assertEquals('update', $param);
+                     return true;
+                 })
+                 ->once();
 
-        $this->user->attach($observer);
         $this->user->attach($observer);
         $this->user->update();
     }
 
+    //public function testObserver()
+    //{
+    //    $observer = $this->getMockBuilder(\App\Models\UserObserver::class)
+    //                     ->onlyMethods(['update'])
+    //                     ->getMock();
+    //    //тестирование аргуметов метода
+    //    $observer->expects($this->exactly(2))
+    //             ->method('update')
+    //             ->with($this->equalTo('update'));
+    //
+    //            /*->with(
+    //                //$this->greaterThan()
+    //                // $this->stringContains('upd')
+    //                 $this->anything()
+    //             );*/
+    //
+    //            /*->withConsecutive(
+    //                [$this->stringContains('upd')],
+    //                [$this->stringContains('upd')]
+    //            );*/
+    //
+    //            /*->with($this->callback(function ($param){
+    //                return 'update' == $param;
+    //            }));*/
+    //
+    //    $this->user->attach($observer);
+    //    $this->user->attach($observer);
+    //    $this->user->update();
+    //}
+
     /*public function testModel()
     {
+        //создание двойника
         //$db = $this->createMock(\App\Models\Db::class);
 
+        //создание двойника через конструктор
         $db = $this->getMockBuilder(\App\Models\Db::class)
             ->disableOriginalConstructor()
                 //->enableOriginalConstructor()
