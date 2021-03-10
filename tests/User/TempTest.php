@@ -1,5 +1,7 @@
 <?php
 
+//Этапы жизни цикла теста
+
 class TempTest //extends \PHPUnit\Framework\TestCase
 {
     //запуск перед инициализацией класса
